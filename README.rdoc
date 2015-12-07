@@ -1,6 +1,10 @@
 = itrp
 
-Description goes here.
+iTRP is a Command Line Interface (CLI) application for Network Security and Traffic Monitoring.
+
+It uses the Trisul Remote Protocol (TRP) to connect to a running instance of Trisul.
+
+
 
 == Contributing to itrp
  

@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "itrp"
   gem.homepage = "http://github.com/vivekrajan/itrp"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{iTRP - Command Line Interface to Trisul Network Analytics}
+  gem.description = %Q{iTRP is an extensible CLI app with tab completion for Network Security and Traffic Monitoring (NSM)}
   gem.email = "vivek@unleashnetworks.com"
   gem.authors = ["vivekrajan"]
   # dependencies defined in Gemfile
