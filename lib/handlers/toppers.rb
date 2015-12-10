@@ -12,7 +12,7 @@ class Cmd_toppers  < Cmd
 
 		patt = cmdline.scan(/toppers ([0-9]+)/).flatten.first 
 
-		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_GROUP_REQUEST,
+		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_GROUP_TOPPER_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :meter => patt.to_i,
 			 :resolve_keys => true,
