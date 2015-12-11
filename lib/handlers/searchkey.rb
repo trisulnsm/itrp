@@ -23,7 +23,7 @@ class Cmd_searchkey  < Cmd
 		terms = cmdline.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
-		[:maxitems].each do |a|
+		[:maxitems, :offset ].each do |a|
 			qparams[a] = qparams[a].to_i if qparams.key? a
 		end
 
