@@ -12,7 +12,7 @@ class Cmd_query_flow   < Cmd
 		TRP::QuerySessionsRequest
 		        .fields
 				.values
-				.collect { |a| a.name }
+				.collect { |a| a.name.to_s  }
 				.grep( /^#{Regexp.escape(patt)}/i)
 	end
 
