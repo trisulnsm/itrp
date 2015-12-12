@@ -12,7 +12,7 @@ class Cmd_traffic < Cmd
 
     def enter(cmdline)
 
-        patt = cmdline.scan(/traffic (.*)/).flatten.first 
+        patt = cmdline.scan(/traffic\s+(.*)/).flatten.first 
 		patt ||= "0"
 		showmeters = patt.split(',').map(&:to_i)
 
@@ -33,7 +33,7 @@ class Cmd_traffic < Cmd
 
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_ITEM_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
-			 :key => @appenv.context_data[:cgkey],
+			 :key => TRP::KeyDetails.new({ :label => @appenv.context_data[:cgkey]}) ,
 			 :time_interval =>  mk_time_interval(@appenv.context_data[:time_window]) )
 
 		rows  = [] 
