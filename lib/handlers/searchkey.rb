@@ -13,7 +13,7 @@ class Cmd_searchkey  < Cmd
 		TRP::SearchKeysRequest
 		        .fields
 				.values
-				.collect { |a| a.name }
+				.collect { |a| a.name.to_s  }
 				.grep( /^#{Regexp.escape(patt)}/i)
 	end
 
