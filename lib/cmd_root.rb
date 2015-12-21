@@ -11,6 +11,7 @@ class Cmd_root < Cmd
 	
 
 	def enter(cmdline)
+	print("Cmdrootenter")
 		unless ["","reload", "clear" ].member? cmdline.strip
 			print("#{cmdline}  #{@enabled_in_state} : not found\n");
 		end

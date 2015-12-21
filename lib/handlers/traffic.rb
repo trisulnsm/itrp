@@ -12,9 +12,11 @@ class Cmd_traffic < Cmd
 
     def enter(cmdline)
 
-        patt = cmdline.scan(/traffic\s+(.*)/).flatten.first 
-		patt ||= "0"
-		showmeters = patt.split(',').map(&:to_i)
+        patt = cmdline.scan(/traffic\s+(.*)/).flatten
+
+		p patt 
+
+		use_key = patt.empty? ? appstate(:cgkey)  : patt[0]
 
 		# meter names 
 		req =mk_request(TRP::Message::Command::COUNTER_GROUP_INFO_REQUEST,
@@ -33,15 +35,17 @@ class Cmd_traffic < Cmd
 
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_ITEM_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
-			 :key => TRP::KeyDetails.new({ :label => @appenv.context_data[:cgkey]}) ,
-			 :time_interval =>  mk_time_interval(@appenv.context_data[:time_window]) )
+			 :key => TRP::KeyT.new( :label => use_key ),
+			 :time_interval =>  appstate( :time_interval) ) 
 
 		rows  = [] 
 
 	
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 			  print "Counter Group = #{resp.stats.counter_group}\n"
-			  print "Key           = #{resp.stats.key}\n"
+			  print "Key           = #{resp.stats.key.key}\n"
+			  print "Readable      = #{resp.stats.key.readable}\n"
+			  print "Label         = #{resp.stats.key.label}\n"
 
 			  tseries  = {}
 			  resp.stats.meters.each do |meter|

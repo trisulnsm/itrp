@@ -9,7 +9,7 @@ class Cmd_options   < Cmd
 	end
 
 	def completions(patt)
-		 [ "maxitems", "key", "resolve_keys" ].grep( /^#{Regexp.escape(patt)}/i)
+		 [ "maxitems", "cgkey", "resolve_keys" ].grep( /^#{Regexp.escape(patt)}/i)
 	end
 
 	def enter(cmdline)

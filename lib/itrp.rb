@@ -101,7 +101,7 @@ class Dispatches
 			load(f)
 			print('.')
 		end
-		print("done\n")
+		print("done\n\n")
 	end
 
 	def help
@@ -134,7 +134,7 @@ while cmd = Readline.readline(Appenv.prompt, true)
     rescue Exception => e 
 		if e.message == 'exit' ; exit; end
         puts "Error " + e.message 
-        puts "Error " + e.backtrace.join('\n') 
+        puts "Error " + e.backtrace.join("\n") 
     end
 end
 

@@ -22,7 +22,7 @@ class Cmd_setlabel  < Cmd
 		p qparams 
         req =mk_request(TRP::Message::Command::UPDATE_KEY_REQUEST,
                          :counter_group => appstate(:cgguid),
-                         :keys  => [ TRP::KeyDetails.new( qparams ) ] )
+                         :keys  => [ TRP::KeyT.new( qparams ) ] )
 
 
         get_response_zmq(@appenv.zmq_endpt,req) do |resp|
