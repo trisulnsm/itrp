@@ -10,18 +10,22 @@ class Cmd_timeslices  < Cmd
 
 	def enter(cmdline)
 
-		req =mk_request(TRP::Message::Command::TIMESLICES_REQUEST,{:context=>0}) 	
+		req =mk_request(TRP::Message::Command::TIMESLICES_REQUEST, 
+				{ :get_disk_usage => true } )
 
         rows = [] 
 
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
-            resp.slices.each do | window |
-                rows << [ Time.at(window.from.tv_sec), Time.at(window.to.tv_sec) ]
+            resp.slices.each do | slice |
+                rows << [ Time.at(slice.time_interval.from.tv_sec), 
+						  Time.at(slice.time_interval.to.tv_sec) ,
+						  slice.name , slice.status, slice.disk_size
+				         ]
             end
         end 
 
 		table = Terminal::Table.new( 
-				:headings => %w(From  To),
+				:headings => %w(From  To Name Status DiskSz),
 				:rows => rows)
 		puts(table) 
     end

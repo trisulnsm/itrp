@@ -89,10 +89,15 @@ class Dispatches
 		end 
 
 		# dispatch to correct plugin w/ context
+		node=nil
 		[Appenv.context, :any].uniq.collect do |ctx|
 			node  = @cmd_roots[ctx].find_node(cmdline.strip.split(' '))
-			node.enter(cmdline.strip) and return if node 
+			if not node.is_root?
+				node.enter(cmdline.strip) 
+				return
+			end
 		end
+		node.notfound(cmdline) if node.is_root?
 	end
 
 	def reload
@@ -128,6 +133,9 @@ end
 
 dispatches = Dispatches.new()
 while cmd = Readline.readline(Appenv.prompt, true)
+
+	next if cmd.strip.empty? 
+
     begin
         dispatches.invoke(cmd)
         Readline::HISTORY.push(cmd)

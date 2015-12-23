@@ -21,6 +21,10 @@ class Cmd
 
 	def enter(s); end
 
+	def is_root?
+		return @trigger.empty?
+	end
+
 	def find_node(linebuffer_arr)
 
 		return self if linebuffer_arr.empty?
