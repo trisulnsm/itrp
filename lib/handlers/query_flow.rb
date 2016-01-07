@@ -21,6 +21,12 @@ class Cmd_query_flow   < Cmd
 		terms = patt.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
+        if qparams[:ip_pair]
+            p = qparams[:ip_pair].split(",")
+            qparams[:ip_pair] = [  TRP::KeyT.new(:label => p[0]),
+                                   TRP::KeyT.new(:label => p[1])]
+        end
+
 	    p qparams 
 
 		# meter names 

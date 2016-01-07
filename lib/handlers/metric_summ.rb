@@ -10,15 +10,15 @@ class Cmd_metrics_summary   < Cmd
 
 	def enter(cmdline)
 
-        patt = cmdline.scan(/metricsum\s+(.*)/).flatten
+		terms = cmdline.scan( /(\w+)\s*=\s*([\w\-_\.\:,\}\{]+)+/ )
+		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
-		p patt 
 
-		use_key = patt.empty? ? appstate(:cgkey)  : patt[0]
+		p qparams 
 
 		req =mk_request(TRP::Message::Command::METRICS_SUMMARY_REQUEST,
-			{:metric_name=>patt[0] , :totals_only=>false, 
-				 :time_interval =>  appstate( :time_interval) }) 
+			#{:time_interval =>  appstate( :time_interval) }.merge(qparams) ) 
+			{}.merge(qparams) ) 
 
 
 		rows = []
