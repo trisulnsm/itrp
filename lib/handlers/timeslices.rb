@@ -17,11 +17,7 @@ class Cmd_timeslices  < Cmd
 		p qparams 
 
 		req =mk_request(TRP::Message::Command::TIMESLICES_REQUEST, 
-<<<<<<< HEAD
-				{ :get_disk_usage => true , :get_all_engines => true } )
-=======
 				{ }.merge(qparams) )
->>>>>>> dc1b84197d826f74025420dcd4f6d1716100b132
 
         rows = [] 
         rows_window  = [] 
