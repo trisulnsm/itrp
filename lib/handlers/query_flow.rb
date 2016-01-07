@@ -21,27 +21,7 @@ class Cmd_query_flow   < Cmd
 		terms = patt.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
-		[:maxitems].each do |a|
-			qparams[a] = qparams[a].to_i if qparams.key? a
-		end
-
-		[:idlist].each do |a|
-			qparams[a] = qparams[a].split(',')  if qparams.key? a
-		end
-
 	    p qparams 
-
-		# convert following fields to KeyT
-		#
-
-		key_fields=[:source_ip,:source_port,:dest_ip,:dest_port,:any_ip,:any_port,
-			 	    :protocol,:nf_routerid,:nf_ifindex_in,:nf_ifindex_out]
-
-		# use set intersection 
-		(key_fields & qparams.keys).each do |k|
-			label = qparams[k] 
-			qparams[k] = TRP::KeyT.new( :label => label)
-		end
 
 		# meter names 
 		req =mk_request(TRP::Message::Command::QUERY_SESSIONS_REQUEST ,

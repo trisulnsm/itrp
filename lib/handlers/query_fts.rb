@@ -31,9 +31,9 @@ class Cmd_query_fts   < Cmd
             resp.documents.each do | doc |
                 rows << [ doc.dockey, 
                           doc.flows.inject("") do |acc,item|
-                            item.key 
+                            item.key  + "( " + item.time.tv_sec.to_s  + ")"
                           end,
-                          'wrap(doc.fullcontent,60)', 
+						  doc.fullcontent.size
                        ]
             end
 

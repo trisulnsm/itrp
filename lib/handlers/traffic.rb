@@ -35,7 +35,7 @@ class Cmd_traffic < Cmd
 
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_ITEM_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
-			 :key => TRP::KeyT.new( :label => use_key ),
+			 :key => use_key, 
 			 :time_interval =>  appstate( :time_interval) ) 
 
 		rows  = [] 

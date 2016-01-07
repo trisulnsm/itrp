@@ -11,7 +11,7 @@ class Cmd_timeslices  < Cmd
 	def enter(cmdline)
 
 		req =mk_request(TRP::Message::Command::TIMESLICES_REQUEST, 
-				{ :get_disk_usage => true } )
+				{ :get_disk_usage => true , :get_all_engines => true } )
 
         rows = [] 
 
