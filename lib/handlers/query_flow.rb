@@ -22,25 +22,8 @@ class Cmd_query_flow   < Cmd
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
 
-        if qparams[:ip_pair]
-            p = qparams[:ip_pair].split(",")
-            qparams[:ip_pair] = [  TRP::KeyT.new(:label => p[0]),
-                                   TRP::KeyT.new(:label => p[1])]
-        end
 
 	    p qparams 
-
-		# convert following fields to KeyT
-		#
-
-		key_fields=[:source_ip,:source_port,:dest_ip,:dest_port,:any_ip,:any_port,
-			 	    :protocol,:nf_routerid,:nf_ifindex_in,:nf_ifindex_out]
-
-		# use set intersection 
-		(key_fields & qparams.keys).each do |k|
-			label = qparams[k] 
-			qparams[k] = TRP::KeyT.new( :label => label)
-		end
 
 		# meter names 
 		req =mk_request(TRP::Message::Command::QUERY_SESSIONS_REQUEST ,
@@ -64,6 +47,9 @@ class Cmd_query_flow   < Cmd
                       sess.key1Z.label,
                       sess.key2A.label,
                       sess.key2Z.label,
+                      sess.nf_routerid.label,
+                      sess.nf_ifindex_in.label,
+                      sess.nf_ifindex_out.label,
                       sess.az_bytes + sess.za_bytes
 					]
             end
@@ -71,7 +57,7 @@ class Cmd_query_flow   < Cmd
         end
 
 		table = Terminal::Table.new( 
-				:headings => %w(ID Time Dur Prot SourceIP DestIP SPort DPort Volume),
+				:headings => %w(ID Time Dur Prot SourceIP DestIP SPort DPort rtr IFin out Volume),
 				:rows => rows)
 		puts(table) 
 

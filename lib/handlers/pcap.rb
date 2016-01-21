@@ -10,11 +10,22 @@ class Cmd_pcap   < Cmd
 
 	def enter(cmdline)
 
-		patt = cmdline.scan(/pcap\s+(\w+)/).flatten.first 
+		patt = cmdline.scan(/pcap\s+([\w=_:\.\-]+)/).flatten.first 
+
+        expr = patt
+
+        if expr == "usefilter" 
+        p @appenv  
+            expr = @appenv.context_data[:filter]
+        end 
+
+
+        expr.gsub!(/flow=/,"{99A78737-4B41-4387-8F31-8077DB917336}=")
+        puts "Using filter " + expr 
 
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::PCAP_REQUEST,
 			 :time_interval => appstate(:time_interval),
-			 :filter_expression => "{99A78737-4B41-4387-8F31-8077DB917336}=06A:C0.A8.01.02:p-0CD1_82.CB.85.32:p-0050",
+			 :filter_expression => expr, 
 			 :save_file => "/tmp/kk.pcap")
 
 		rows = []
