@@ -21,8 +21,6 @@ class Cmd_query_flow   < Cmd
 		terms = patt.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
-
-
 	    p qparams 
 
 		# meter names 
