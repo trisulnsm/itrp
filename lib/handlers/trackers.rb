@@ -25,11 +25,15 @@ class Cmd_flow_trackers   < Cmd
 
 			rows << [ "#{sess.session_key}",
 					  Time.at( sess.time_interval.from.tv_sec).to_s(),
+					  sess.probe_id,
 					  sess.protocol.label,
 					  sess.key1A.label,
 					  sess.key1Z.label,
 					  sess.key2A.label,
 					  sess.key2Z.label,
+					  sess.nf_routerid.label,
+					  sess.nf_ifindex_in.label,
+					  sess.nf_ifindex_out.label,
 					  sess.tracker_statval 
 					]
 			end
@@ -37,7 +41,7 @@ class Cmd_flow_trackers   < Cmd
 		end
 
 		table = Terminal::Table.new( 
-				:headings => %w(Key Last-Seen Prot SourceIP DestIP SPort DPort TrackerVal),
+				:headings => %w(Key Last-Seen ProbeID Prot SourceIP DestIP SPort DPort Rtr IfIn IfOut TrackerVal),
 				:rows => rows)
 		puts(table) 
 

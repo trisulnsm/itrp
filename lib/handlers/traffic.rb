@@ -40,25 +40,19 @@ class Cmd_traffic < Cmd
 
 		rows  = [] 
 
+		print "Request sent at  #{Time.now}\n"
 	
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
-			  print "Counter Group = #{resp.stats.counter_group}\n"
-			  print "Key           = #{resp.stats.key.key}\n"
-			  print "Readable      = #{resp.stats.key.readable}\n"
-			  print "Label         = #{resp.stats.key.label}\n"
+			  print "Counter Group = #{resp.counter_group}\n"
+			  print "Key           = #{resp.key.key}\n"
+			  print "Readable      = #{resp.key.readable}\n"
+			  print "Label         = #{resp.key.label}\n"
+			  print "Num intervals = #{resp.stats.size}\n"
 
-			  tseries  = {}
-			  resp.stats.meters.each do |meter|
-				meter.values.each do |val|
-					tseries[ val.ts.tv_sec ] ||= []
-					tseries[ val.ts.tv_sec ]  << val.val 
-				end
-			  end
+			  print "Response at  #{Time.now}\n"
 
-
-			  rows = []
-			  tseries.each do |ts,valarr|
-			  	rows << [ ts, valarr ].flatten 
+			  resp.stats.each do |tsval|
+			  	rows << [ Time.at(tsval.ts_tv_sec), tsval.values  ].flatten 
 			  end
 
 			  table = Terminal::Table.new(:headings => colnames,  :rows => rows )

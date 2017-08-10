@@ -20,20 +20,7 @@ class Cmd_query_resource  < Cmd
 
 		terms = patt.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
 
-		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, TRP::KeyT.new(:label=>t[1]));acc}
-
-		[:maxitems].each do |a|
-			qparams[a] = qparams[a].to_i if qparams.key? a
-		end
-
-		[:ip_pair].each do |a|
-            if qparams[a]
-                qparams[a] = qparams[a].split(',')
-                            .collect do |e|
-                             TRP::KeyT.new( :label => e )
-                            end
-            end
-		end
+		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
 	    p qparams 
 

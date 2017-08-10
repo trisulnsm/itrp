@@ -40,6 +40,7 @@ class Cmd_query_flow   < Cmd
             rows << [ "#{sess.session_id}",
                       Time.at( sess.time_interval.from.tv_sec).to_s(),
 					  sess.time_interval.to.tv_sec - sess.time_interval.from.tv_sec,
+                      sess.probe_id,
                       sess.protocol.label,
                       sess.key1A.label,
                       sess.key1Z.label,
@@ -55,7 +56,7 @@ class Cmd_query_flow   < Cmd
         end
 
 		table = Terminal::Table.new( 
-				:headings => %w(ID Time Dur Prot SourceIP DestIP SPort DPort rtr IFin out Volume),
+				:headings => %w(ID Time Dur Prb  Prot SourceIP DestIP SPort DPort rtr IFin out Volume),
 				:rows => rows)
 		puts(table) 
 

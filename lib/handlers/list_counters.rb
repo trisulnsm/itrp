@@ -10,19 +10,20 @@ class Cmd_cglist  < Cmd
 
 
 	def enter(cmdline)
-		req =mk_request(TRP::Message::Command::COUNTER_GROUP_INFO_REQUEST)
+		req =mk_request(TRP::Message::Command::COUNTER_GROUP_INFO_REQUEST, {:get_meter_info=>true} )
 
 		rows = []
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 			  resp.group_details.each do |group_detail|
 			  	rows << [ group_detail.name,
 						  group_detail.guid,
-						  group_detail.bucket_size.to_i/1000
+						  group_detail.bucket_size.to_i/1000,
+						  group_detail.meters.size
 				        ]
 			  end
 		end
 
-		table = Terminal::Table.new :headings => %w(name guid bs), :rows => rows
+		table = Terminal::Table.new :headings => %w(name guid bs num_meters), :rows => rows
 		puts(table) 
 	end
 
