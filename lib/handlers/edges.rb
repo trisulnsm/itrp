@@ -30,16 +30,23 @@ class Cmd_edges < Cmd
 	
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 
+				print "=====  RESPONSE  =====\n"
+				print "\tSUBJECT GUID = #{resp.subject_group}\n"
+				print "\tSUBJECT KEY  = #{resp.subject_key.key}\n"
+
 			resp.graphs.each do |g|
 
-				print "=====  GRAPH =====\n"
-				print "\tSUBJECT GUID = #{g.subject_guid}\n"
-				print "\tSUBJECT KEY  = #{g.subject_key}\n"
+				print "=====  GRAPH  =====\n"
+				print "\t\tTIME FROM = #{Time.at(g.time_interval.from.tv_sec)}\n"
+				print "\t\tTIME TO   = #{Time.at(g.time_interval.to.tv_sec)}\n"
 
 				g.vertex_groups.each do |vg|
-					print "\t\t---------------------------------------------\n"
-					print "\t\tVERTEX   GROUP = #{vg.vertex_group}\n"
-					print "\t\tVERTICES GROUP = #{vg.vertex_keys.join(",")}\n"
+
+					vertices_labels = vg.vertex_keys.collect { |k| k.label }.join(',')
+
+					print "\t\t\t---------------------------------------------\n"
+					print "\t\t\tVERTEX   GROUP  = #{vg.vertex_group}\n"
+					print "\t\t\tVERTICES LABELS = #{vertices_labels}\n"
 				end
 
 			end 
