@@ -10,13 +10,17 @@ class Cmd_flow_trackers   < Cmd
 
 	def enter(cmdline)
 
-		patt = cmdline.scan(/tracker\s+([0-9]+)/).flatten.first 
+
+		terms = cmdline.scan( /(\w+)\s*=\s*([\w\-_\.\:,]+)+/ )
+		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
+
+		p qparams 
 
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::SESSION_TRACKER_REQUEST,
+			 qparams.merge(
 			 :session_group  => appstate(:cgguid),
 			 :time_interval => appstate(:time_interval),
-			 :resolve_keys => true,
-			 :tracker_id => patt.to_i)
+			 :resolve_keys => true))
 
 		rows = []
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
@@ -31,9 +35,9 @@ class Cmd_flow_trackers   < Cmd
 					  sess.key1Z.label,
 					  sess.key2A.label,
 					  sess.key2Z.label,
-					  sess.nf_routerid.label,
-					  sess.nf_ifindex_in.label,
-					  sess.nf_ifindex_out.label,
+					  sess.nf_routerid.nil? ? "": sess.nf_router_id.label,
+					  sess.nf_ifindex_in.nil? ? "": sess.nf_ifindex_in.label,
+					  sess.nf_ifindex_out.nil? ? "": sess.nf_ifindex_out.label,
 					  sess.tracker_statval 
 					]
 			end

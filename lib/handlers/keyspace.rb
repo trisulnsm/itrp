@@ -12,7 +12,7 @@ class Cmd_keyspace < Cmd
 
     def enter(cmdline)
 
-        patt = cmdline.scan(/keyspace\s+(.*)\s(.*)/).flatten
+        patt = cmdline.scan(/keyspace\s+(\S+)\s*(\S+)/).flatten
 
 		p "#{patt[0]} to #{patt[1]}" 
 
@@ -23,7 +23,7 @@ class Cmd_keyspace < Cmd
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::KEYSPACE_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :time_interval =>  appstate( :time_interval),
-             :spaces => use_spaces ) 
+			 :totals_only => true )
 
 		rows  = [] 
 
@@ -34,7 +34,10 @@ class Cmd_keyspace < Cmd
                     rows << [ i, kt.key, kt.label, kt.readable ]
                 end 
 
+				p "TOTAL HITS = #{resp.total_hits}" 
 		end
+
+
 
 		table = Terminal::Table.new( 
 				:headings => %w(# Key Label Readable ),

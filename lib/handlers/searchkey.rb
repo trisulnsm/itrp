@@ -35,17 +35,23 @@ class Cmd_searchkey  < Cmd
         req =mk_request(TRP::Message::Command::SEARCH_KEYS_REQUEST,
                         {
                              :counter_group => appstate(:cgguid),
+							 :get_attributes => true
                         }.merge( qparams))
 
         rows = []
         get_response_zmq(@appenv.zmq_endpt,req) do |resp|
             resp.keys.each do |k|
-                rows << [ k.key, k.label, k.readable ]
+
+				attr  =  k.attributes.collect  do |a|
+					"#{a.attr_name}=#{a.attr_value}"
+				end
+                rows << [ k.key, k.label, k.readable, attr.join(",") ]
+
             end
         end
 
 
-        table = Terminal::Table.new( :headings => %w(Key  Label Readable ), :rows => rows)
+        table = Terminal::Table.new( :headings => %w(Key  Label Readable Attributes ), :rows => rows)
         puts(table) 
 
     end

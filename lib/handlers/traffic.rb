@@ -47,6 +47,7 @@ class Cmd_traffic < Cmd
 			  print "Key           = #{resp.key.key}\n"
 			  print "Readable      = #{resp.key.readable}\n"
 			  print "Label         = #{resp.key.label}\n"
+			  print "Description   = #{resp.key.description}\n"
 			  print "Num intervals = #{resp.stats.size}\n"
 
 			  print "Response at  #{Time.now}\n"
