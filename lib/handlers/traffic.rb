@@ -27,7 +27,7 @@ class Cmd_traffic < Cmd
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 			  resp.group_details.each do |group_detail|
 			  	group_detail.meters.each do |meter|
-					colnames  <<  meter.name  
+					colnames  <<  meter.units  
 				end
 			  end
 		end
@@ -42,6 +42,7 @@ class Cmd_traffic < Cmd
 
 		print "Request sent at  #{Time.now}\n"
 	
+		totals = nil 
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 			  print "Counter Group = #{resp.counter_group}\n"
 			  print "Key           = #{resp.key.key}\n"
@@ -52,12 +53,20 @@ class Cmd_traffic < Cmd
 
 			  print "Response at  #{Time.now}\n"
 
+
 			  resp.stats.each do |tsval|
-			  	rows << [ Time.at(tsval.ts_tv_sec), tsval.values  ].flatten 
+			  		if totals.nil? 
+						totals = tsval.values
+					else 
+					  totals = [totals, tsval.values ].transpose.map {|x| x.reduce(:+)}
+					end 
+				  rows << [ Time.at(tsval.ts_tv_sec), tsval.values  ].flatten 
 			  end
 
 			  table = Terminal::Table.new(:headings => colnames,  :rows => rows )
 			  puts(table) 
+			  totalstable = Terminal::Table.new(:headings => colnames,  :rows => [totals.unshift(0).collect{|a| a*60}])
+			  puts(totalstable) 
 		end
 
 	end
