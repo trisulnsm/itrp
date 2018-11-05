@@ -37,6 +37,8 @@ class Cmd_query_flow   < Cmd
 
             resp.sessions.each do | sess |
 
+			p sess 
+
             rows << [ "#{sess.session_id}",
                       Time.at( sess.time_interval.from.tv_sec).to_s(),
 					  sess.time_interval.to.tv_sec - sess.time_interval.from.tv_sec,
@@ -46,9 +48,6 @@ class Cmd_query_flow   < Cmd
                       sess.key1Z.label,
                       sess.key2A.label,
                       sess.key2Z.label,
-                      sess.nf_routerid.label,
-                      sess.nf_ifindex_in.label,
-                      sess.nf_ifindex_out.label,
                       sess.az_bytes + sess.za_bytes
 					]
             end
