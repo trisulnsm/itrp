@@ -117,14 +117,16 @@ class Dispatches
 	end
 
 	def quit
+		savehistory
+		exit 0
+	end
 
+	def savehistory
         File.open( HISTFILE, "w") do |h|
             Readline::HISTORY.to_a.uniq.each do |l|
                 h.write(l + "\n" ) 
             end
         end
-
-		exit 0
 	end
 
 
@@ -139,6 +141,7 @@ while cmd = Readline.readline(Appenv.prompt, false)
     begin
         dispatches.invoke(cmd)
         Readline::HISTORY.push(cmd)
+		dispatches.savehistory
     rescue Exception => e 
 		if e.message == 'exit' ; exit; end
         puts "Error " + e.message 
