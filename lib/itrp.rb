@@ -132,7 +132,7 @@ end
 
 
 dispatches = Dispatches.new()
-while cmd = Readline.readline(Appenv.prompt, true)
+while cmd = Readline.readline(Appenv.prompt, false)
 
 	next if cmd.strip.empty? 
 
