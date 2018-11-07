@@ -31,25 +31,23 @@ class Cmd_agg_flow   < Cmd
 						 :resolve_keys => true,
 						}.merge(qparams))
 
-        rows = [] 
 
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
-			rows << resp.protocol.collect  do |item|
-				if item.key then
-			 	 [item.key.key, item.key.readable, item.key.label, item.count]
-				else
-				 ["nil",0]
-				end 
-			end
-			
-        end
 
-		p rows 
+			%w(dest_ip dest_port  protocol).each do |fieldname| 
 
-		table = Terminal::Table.new( 
-				:headings => %w(SourceIP Readable Label Volume ),
-				:rows => rows.first )
-		puts(table) 
+				rows = [] 
+				rows << resp.send(fieldname).collect  do |item|
+					 [item.key.key, item.key.readable, item.key.label, item.count, item.metric]
+				end
+
+				table = Terminal::Table.new( 
+						:headings => [fieldname, 'Readable', 'Label', 'Flows', 'Metric'  ],
+						:rows => rows.first )
+				puts(table) 
+
+			end 
+		end
 
 
     end
