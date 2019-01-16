@@ -15,10 +15,18 @@ class Cmd_cglist  < Cmd
 		rows = []
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 			  resp.group_details.each do |group_detail|
+			  	cstr=""
+			    if group_detail.crosskey 
+					cstr = [group_detail.crosskey.parentguid, 
+						    group_detail.crosskey.crosskeyguid_1,
+						    group_detail.crosskey.crosskeyguid_2].join(",") 
+
+				end 
 			  	rows << [ group_detail.name,
 						  group_detail.guid,
 						  group_detail.bucket_size.to_i/1000,
-						  group_detail.meters.size
+						  group_detail.meters.size,
+						  cstr
 				        ]
 			  end
 		end

@@ -11,7 +11,6 @@ class Cmd_query_flow   < Cmd
 	def completions(patt)
 		TRP::QuerySessionsRequest
 		        .fields
-				.values
 				.collect { |a| a.name.to_s  }
 				.grep( /^#{Regexp.escape(patt)}/i)
 	end
@@ -35,19 +34,18 @@ class Cmd_query_flow   < Cmd
 
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 
-            resp.sessions.each do | sess |
+            resp.sessions.each_with_index  do | sess , i |
 
-			p sess 
-
-            rows << [ "#{sess.session_id}",
+            rows << [ i, 
+			          "#{sess.session_id}",
                       Time.at( sess.time_interval.from.tv_sec).to_s(),
 					  sess.time_interval.to.tv_sec - sess.time_interval.from.tv_sec,
                       sess.probe_id,
                       sess.protocol.label,
                       sess.key1A.label,
                       sess.key1Z.label,
-                      sess.key2A.label,
-                      sess.key2Z.label,
+                      sess.key2A.readable,
+                      sess.key2Z.readable,
                       sess.az_bytes + sess.za_bytes
 					]
             end
@@ -55,7 +53,7 @@ class Cmd_query_flow   < Cmd
         end
 
 		table = Terminal::Table.new( 
-				:headings => %w(ID Time Dur Prb  Prot SourceIP DestIP SPort DPort rtr IFin out Volume),
+				:headings => %w(num ID Time Dur Prb  Prot SourceIP DestIP SPort DPort rtr IFin out Volume),
 				:rows => rows)
 		puts(table) 
 

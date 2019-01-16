@@ -11,7 +11,6 @@ class Cmd_agg_flow   < Cmd
 	def completions(patt)
 		TRP::AggregateSessionsRequest
 		        .fields
-				.values
 				.collect { |a| a.name.to_s  }
 				.grep( /^#{Regexp.escape(patt)}/i)
 	end
