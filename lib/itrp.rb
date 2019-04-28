@@ -23,7 +23,8 @@ raise %q{
 } unless ARGV.length==1
 
 HISTFILE=File.expand_path("~/.itrp_history")
-DEFAULT_PROMPT="iTRP> "
+DEFAULT_PROMPT=  "iTRP> "
+MULTILINE_PROMPT="+     "
 
 class ITRPEnv
 	attr_accessor :prompt 
@@ -134,14 +135,24 @@ end
 
 
 dispatches = Dispatches.new()
+multiline = [] 
 while cmd = Readline.readline(Appenv.prompt, false)
 
 	next if cmd.strip.empty? 
 
     begin
-        dispatches.invoke(cmd)
-        Readline::HISTORY.push(cmd)
-		dispatches.savehistory
+		if cmd =~ /;\s*$/ 
+			multiline << cmd 
+			fullcmd = multiline.join() 
+			dispatches.invoke(fullcmd)
+			Readline::HISTORY.push(fullcmd)
+			dispatches.savehistory
+			Appenv.prompt = DEFAULT_PROMPT 
+			multiline = []
+		else
+			multiline << cmd 
+			Appenv.prompt = MULTILINE_PROMPT
+		end 
     rescue Exception => e 
 		if e.message == 'exit' ; exit; end
         puts "Error " + e.message 

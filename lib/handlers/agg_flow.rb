@@ -46,6 +46,25 @@ class Cmd_agg_flow   < Cmd
 				puts(table) 
 
 			end 
+
+			# tags
+			resp.tag_group.each do |tg|
+
+				puts(tg.group_name)
+
+				rows = [] 
+				rows << tg.tag_metrics.collect  do |item|
+					 [item.key.key, item.count, item.metric]
+				end
+
+				table = Terminal::Table.new( 
+						:headings => ['Tag', 'Flows', 'Metric'  ],
+						:rows => rows.first )
+				puts(table) 
+
+
+			end 
+
 		end
 
 
