@@ -28,6 +28,7 @@ class Cmd_agg_flow   < Cmd
 						 :session_group  => appstate(:cgguid),
                          :time_interval => appstate(:time_interval),
 						 :resolve_keys => true,
+						 :group_by_fields => ['any_ip','flowtag','protocol'] 
 						}.merge(qparams))
 
 
