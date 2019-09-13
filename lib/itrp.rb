@@ -142,10 +142,10 @@ while cmd = Readline.readline(Appenv.prompt, false)
 
     begin
 		if cmd =~ /;\s*$/ 
-			multiline << cmd 
+			multiline << cmd.match(/(.*);/)[1] 
 			fullcmd = multiline.join() 
 			dispatches.invoke(fullcmd)
-			Readline::HISTORY.push(fullcmd)
+			Readline::HISTORY.push(fullcmd + ";" )
 			dispatches.savehistory
 			Appenv.prompt = DEFAULT_PROMPT 
 			multiline = []
