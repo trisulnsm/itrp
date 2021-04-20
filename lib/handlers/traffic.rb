@@ -36,6 +36,7 @@ class Cmd_traffic < Cmd
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_ITEM_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :key => use_key, 
+			 :get_key_attributes=>true,
 			 :time_interval =>  appstate( :time_interval) ) 
 
 		rows  = [] 
@@ -50,6 +51,12 @@ class Cmd_traffic < Cmd
 			  print "Label         = #{resp.key.label}\n"
 			  print "Description   = #{resp.key.description}\n"
 			  print "Num intervals = #{resp.stats.size}\n"
+
+			  # attribute strings 
+			  attr_str = resp.key.attributes.inject( "") do  |acc,h| 
+				acc << "#{h.attr_name}=#{h.attr_value} " 
+			  end 
+			  print "Attributes    = #{attr_str}\n"
 
 			  print "Response at  #{Time.now}\n"
 
