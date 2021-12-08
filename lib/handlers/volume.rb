@@ -26,6 +26,7 @@ class Cmd_volume < Cmd
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :key => use_key, 
 			 :volumes_only => 1,
+			 :get_percentile => 95,
 			 :time_interval =>  appstate( :time_interval) ) 
 
 		rows  = [] 
@@ -36,8 +37,10 @@ class Cmd_volume < Cmd
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 
 			total = resp.totals.values[use_meter]
+			pct   = resp.percentiles.values[use_meter]
 
-			print( "Total = #{total * 60 }\n")
+			print( "Total       = #{total * 60 }\n")
+			print( "Percentile  = #{pct }\n")
 
 		end
 
