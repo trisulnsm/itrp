@@ -15,6 +15,8 @@ class Cmd_toptrend  < Cmd
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::TOPPER_TREND_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :meter => patt.to_i,
+			 :maxitems  => 10,
+			 :key_filter => "67.19.2C.01_000002A",
 			 :time_interval =>  mk_time_interval(@appenv.context_data[:time_window]))
 
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
@@ -25,13 +27,16 @@ class Cmd_toptrend  < Cmd
 			  resp.keytrends.each do |ks|
 					  print("Trends for key #{ks.key.label}\n")
 
+					  ks.key.attributes.each  do |a|
+						puts "#{a.attr_name}=#{a.attr_value}"
+					  end
+
 					  rows = []
 					  ks.meters.each do |meter|
 						meter.values.each do |val|
 							rows << [val.ts.tv_sec,val.val]
 						end
 					  end
-
 
 					  table = Terminal::Table.new(:headings => ["Time", "Value"], :rows => rows )
 					  puts(table) 
