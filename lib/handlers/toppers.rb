@@ -15,9 +15,10 @@ class Cmd_toppers  < Cmd
 		req =TrisulRP::Protocol.mk_request(TRP::Message::Command::COUNTER_GROUP_TOPPER_REQUEST,
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :meter => patt.to_i,
-			 :maxitems => 5,
+			 :maxitems => 10,
 			 :resolve_keys => true,
 			 :get_key_attributes => true, 
+			 :get_percentiles  => [95], 
 			 :time_interval =>  mk_time_interval(@appenv.context_data[:time_window]))
 
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
@@ -32,10 +33,12 @@ class Cmd_toppers  < Cmd
 			  		rows << [ key.key,
 							  key.label,
 							  key.readable,
-							  key.metric, attr_str ] 
+							  as_size_volume(60*key.metric), 
+							  as_size_bw(key.percentiles[0].value * 8), 
+							  attr_str ] 
 			  end
 
-			table = Terminal::Table.new :headings => ["Key", "Label", "Readable", "Metric"], :rows => rows
+			table = Terminal::Table.new :headings => ["Key", "Label", "Readable", "Metric", "95th"], :rows => rows
 			puts(table) 
 		end
 

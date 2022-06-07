@@ -26,7 +26,7 @@ class Cmd_volume < Cmd
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :key => use_key, 
 			 :volumes_only => 1,
-			 :get_percentile => 0,
+			 :get_percentile => 95,
 			 :time_interval =>  appstate( :time_interval) ) 
 
 		rows  = [] 
@@ -42,8 +42,8 @@ class Cmd_volume < Cmd
 				pct   = resp.percentiles.values[use_meter]
 			end 
 
-			print( "Total       = #{total * 60 }\n")
-			print( "Percentile  = #{pct }\n")
+			print( "Total       = #{as_size_volume(total * 60) }\n")
+			print( "Percentile  = #{as_size_bw(pct*8) }\n")
 
 		end
 

@@ -105,6 +105,32 @@ protected
     def wrap(str,width)
       str.gsub!(/(.{1,#{width}})( +|$\n?)|(.{1,#{width}})/, "\\1\\3\n")
     end
+
+
+	PREFIX_VOLUME = %W(TiB GiB MiB KiB B).freeze
+	PREFIX_BW      = %W(Tbps Gbps Mbps Kbps bps).freeze
+
+	def as_size_volume( s )
+	  s = s.to_f
+	  i = PREFIX_VOLUME.length - 1
+	  while s > 512 && i > 0
+		i -= 1
+		s /= 1024.0
+	  end
+	  ((s > 9 || s.modulo(1) < 0.1 ? '%d' : '%.1f') % s) + ' ' + PREFIX_VOLUME[i]
+	end
+
+	def as_size_bw( s )
+	  s = s.to_f
+	  i = PREFIX_BW.length - 1
+	  while s > 500 && i > 0
+		i -= 1
+		s /= 1000.0
+	  end
+	  ((s > 9 || s.modulo(1) < 0.1 ? '%d' : '%.1f') % s) + ' ' + PREFIX_BW[i]
+	end
+
+
 end
 
 end
