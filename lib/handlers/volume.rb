@@ -36,14 +36,25 @@ class Cmd_volume < Cmd
 	
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 
-			total = resp.totals.values[use_meter]
+			tot= resp.totals.values[use_meter]
+			max = resp.maximums.values[use_meter]
+			min = resp.minimums.values[use_meter]
+			smp = resp.samples.values[use_meter]
+			lat = resp.latests.values[use_meter]
+
 			pct = 0
 			if resp.percentiles
 				pct   = resp.percentiles.values[use_meter]
 			end 
 
-			print( "Total       = #{as_size_volume(total * 60) }\n")
-			print( "Percentile  = #{as_size_bw(pct*8) }\n")
+			p resp 
+
+			print( "Total      : #{as_size_volume(tot * 60) }\n")
+			print( "Percentile : #{as_size_bw(pct*8) }\n")
+			print( "Max        : #{as_size_bw(max * 8) }\n")
+			print( "Min        : #{as_size_bw(min * 8) }\n")
+			print( "Samples    : #{smp} \n")
+			print( "Latest     : #{as_size_bw(lat * 8) }\n")
 
 		end
 

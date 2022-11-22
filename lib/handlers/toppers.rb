@@ -38,7 +38,7 @@ class Cmd_toppers  < Cmd
 							  attr_str ] 
 			  end
 
-			table = Terminal::Table.new :headings => ["Key", "Label", "Readable", "Metric", "95th"], :rows => rows
+			table = Terminal::Table.new :headings => ["Key", "Label", "Readable", "Metric", "95th", "Attrib"], :rows => rows
 			puts(table) 
 		end
 

@@ -51,7 +51,13 @@ class Cmd_agg_flow   < Cmd
 
 				rows = [] 
 				rows << resp.send(fieldname).collect  do |item|
-					 [item.key.key, item.key.readable, item.key.label, item.count, item.metric]
+
+					  # attribute strings 
+					  attr_str = item.key.attributes.collect do |h| 
+					  	h.attr_value
+					  end.join(' ')
+
+					  [item.key.key, item.key.readable, item.key.label + " " + attr_str , item.count, item.metric]
 				end
 
 				table = Terminal::Table.new( 
@@ -68,11 +74,11 @@ class Cmd_agg_flow   < Cmd
 
 				rows = [] 
 				rows << tg.tag_metrics.collect  do |item|
-					 [item.key.key, item.count, item.metric]
+					 [item.key.key, item.key.label, item.count, item.metric]
 				end
 
 				table = Terminal::Table.new( 
-						:headings => ['Tag', 'Flows', 'Metric'  ],
+						:headings => ['Tag', 'Label', 'Flows', 'Metric'  ],
 						:rows => rows.first )
 				puts(table) 
 
