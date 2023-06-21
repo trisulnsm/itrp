@@ -16,7 +16,7 @@ class Cmd_toptrend  < Cmd
 			 :counter_group => @appenv.context_data[:cgguid],
 			 :meter => patt.to_i,
 			 :maxitems  => 10,
-			 :key_filter => "67.19.2C.01_000002A",
+			 :key_filter => "0A.75.E0.14_00000021",
 			 :time_interval =>  mk_time_interval(@appenv.context_data[:time_window]))
 
 		TrisulRP::Protocol.get_response_zmq(@appenv.zmq_endpt,req) do |resp|
@@ -34,7 +34,7 @@ class Cmd_toptrend  < Cmd
 					  rows = []
 					  ks.meters.each do |meter|
 						meter.values.each do |val|
-							rows << [val.ts.tv_sec,val.val]
+							rows << [Time.at(val.ts.tv_sec).to_s,val.val]
 						end
 					  end
 

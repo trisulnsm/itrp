@@ -1,5 +1,10 @@
 module ITRP 
 
+#
+# any fields in the TRP proto file  most used 
+# pattern=
+# label=
+#
 class Cmd_searchkey  < Cmd 
 	def initialize (e)
 		super(e)
@@ -20,7 +25,7 @@ class Cmd_searchkey  < Cmd
 
 	def enter(cmdline)
 
-		terms = cmdline.scan( /(\w+)\s*=\s*([\w\-_\.\:,\]\[]+)+/ )
+		terms = cmdline.scan( /(\w+)\s*=\s*([\w\-_\.\:,\]\[\$]+)+/ )
 		qparams = terms.inject({}) { |acc,t| acc.store( t[0].to_sym, t[1]);acc}
 
 		[:maxitems, :offset ].each do |a|

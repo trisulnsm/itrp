@@ -47,7 +47,7 @@ class Cmd_agg_flow   < Cmd
 
 		get_response_zmq(@appenv.zmq_endpt,req) do |resp|
 
-			%w(dest_port  nf_routerid nf_ifindex_in nf_ifindex_out ).each do |fieldname| 
+			%w(conversation nf_ifindex_out ).each do |fieldname| 
 
 				rows = [] 
 				rows << resp.send(fieldname).collect  do |item|
